@@ -1,0 +1,16 @@
+Action
+Adventure
+Horror
+Legal
+Romance
+Science-Fiction
+History
+Drama
+Thriller
+Crime
+Fantasy
+Family
+Comedy
+Mystery
+Medical
+Supernatural
