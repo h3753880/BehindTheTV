@@ -4,7 +4,10 @@ import java.util.ArrayList;
 
 /**
  *
- *
+ * Normal.getMap -> get attribute name by matrix col index
+ * Normal.getGenMap -> get matrix col index by attribute name
+ * Normal.getMat -> get matrix
+ * Normal.getRating -> get rating
  */
 public class Main {
     public static void main(String[] args) {

@@ -245,19 +245,34 @@ public class Normal {
         }
     }
 
-
+    /**
+     * get attribute name by matrix col index
+     * @return hashMap<Integer, String>
+     */
     public HashMap<Integer, String> getMap() {
         return map;
     }
 
+    /**
+     * get matrix col index by attribute name
+     * @return hashMap<String, Integer>
+     */
     public HashMap<String, Integer> getGenMap() {
         return genMap;
     }
 
+    /**
+     * get matrix
+     * @return 2D matrix array (double)
+     */
     public double[][] getMat() {
         return mat;
     }
 
+    /**
+     * get rating
+     * @return ArrayList<Double> with rating
+     */
     public ArrayList<Double> getRating() {
         return rating;
     }
