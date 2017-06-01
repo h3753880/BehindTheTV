@@ -19,11 +19,11 @@ public class Normal {
         this.shows = shows;
 
         rating = new ArrayList<Double>();
-        mat = new double[shows.size()][46];
         map = new HashMap<>();
         genMap = new HashMap<>();
         genres = Tool.readFileByLine("genre.txt");
         channels = Tool.readFileByLine("net.txt");
+        mat = new double[shows.size()][13+genres.size()+channels.size()];
     }
 
     public void normFeatures() {
@@ -200,7 +200,7 @@ public class Normal {
             genMap.put(gen, genMap.size());
         }
 
-        //13 + 17 = 30
+        //13
         map.put(map.size(), "Executive Producer");
         genMap.put("Executive Producer", genMap.size());
         map.put(map.size(), "Creator");
