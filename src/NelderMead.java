@@ -11,23 +11,24 @@
 import java.io.*;
 import java.util.*;
 import java.text.DecimalFormat;
+import java.io.FileWriter;
 
 
 public class NelderMead
 {
 
 
-    static final int MAXITER = 1000;
-    static int ncalls = 0;
-    static final double TOL = 1E-6;
+    static private final int MAXITER = 3000;
+    static private int ncalls = 0;
+    static private final double TOL = 1E-6;
 
-    static final double LAMBDA = 0;
-    static final double THETA = 17;
+    static private final double LAMBDA = 0.0;
+    static private final double THETA = 20;
 
-    static int NDIMS;
-    static int NPTS;
-    static int FUNC;
-    static int NTVSHOW;
+    static private int NDIMS;
+    static private int NPTS;
+    static private int FUNC;
+    static private int NTVSHOW;
 
 
     static private double[][] mat;
@@ -55,16 +56,18 @@ public class NelderMead
     public void descend()
     {
         ////// set up the starting simplex //////////////////
+        System.out.println("NTVSHOW = "+mat.length+" NFEATURE = "+mat[0].length);
+        //System.out.println("rating len = "+rating.size());
         double simplex[][] = new double[NPTS][NPTS]; // [row][col] = [whichvx][coord,FUNC]
 
         for ( int i = 1 ; i < simplex.length ; i++ ) {
             simplex[0][i-1] = 1;
-            simplex[i][i-1] = 3;
+            simplex[i][i-1] = 5;
         }
         for ( int i = 1 ; i < simplex.length ; i++ ) {
             for ( int j = 0 ; j < simplex[i].length - 1 ; j++ ) {
                 if ( i-1 != j )
-                    simplex[i][j] = 0.2;
+                    simplex[i][j] = 0.5;
             }
         }
         /*for ( int i = 0 ; i < simplex.length ; i++ ) {
@@ -103,9 +106,9 @@ public class NelderMead
                 if ((i != ihi) && (simplex[i][FUNC] > fnhi))
                 {fnhi=simplex[i][FUNC]; inhi=i;}
 
-            for (int j=0; j<=NDIMS; j++)
+            /*for (int j=0; j<=NDIMS; j++)
                 System.out.print(fwd(simplex[ilo][j], 5, 2));
-            System.out.println();
+            System.out.println();*/
 
             for (int j = 0 ; j < NDIMS; j++)
                 featureWeighting[j] = simplex[ilo][j];
@@ -341,44 +344,158 @@ public class NelderMead
     }
     public void printRating()
     {
-        for (double d : rating)
+        try{
+            //All your IO Operations
+            FileWriter fw = new FileWriter("rating.csv");
+            for (int index = 0; index < rating.size(); index++)
+            {
+                if (index == rating.size() - 1)
+                {
+                    fw.append(String.valueOf(rating.get(index)));
+                }
+                else
+                {
+                    fw.append(String.valueOf(rating.get(index)));
+                    fw.append(" ");
+                }
+            }
+            fw.append("\n");
+            fw.close();
+        }
+        catch(IOException ioe){
+            //Handle exception here, most of the time you will just log it.
+        }
+
+        /*for (double d : rating)
             System.out.print(new DecimalFormat("#0.00").format(d)+" ");
-        System.out.println();
+        System.out.println();*/
     }
     public void printPredictedRating()
     {
-        for (double d : predictedRating)
+        try{
+            //All your IO Operations
+            FileWriter fw = new FileWriter("PredictedRating.csv");
+
+            for (int index = 0; index < predictedRating.size(); index++)
+            {
+                if (index == rating.size() - 1)
+                {
+                    fw.append(String.valueOf(predictedRating.get(index)));
+                }
+                else
+                {
+                    fw.append(String.valueOf(predictedRating.get(index)));
+                    fw.append(" ");
+                }
+            }
+            fw.append("\n");
+            fw.close();
+        }
+        catch(IOException ioe){
+            //Handle exception here, most of the time you will just log it.
+        }
+        /*for (double d : predictedRating)
             System.out.print(new DecimalFormat("#0.00").format(d)+" ");
-        System.out.println();
+        System.out.println();*/
     }
     public void printDistance()
     {
-        for ( int i = 0 ; i < distance.length ; i++ ) {
+        try{
+            //All your IO Operations
+            FileWriter fw = new FileWriter("distance.csv");
+            for (double[] aDistance : distance) {
+                for (int j = 0; j < aDistance.length; j++) {
+
+                    if (j == aDistance.length - 1) {
+                        fw.append(String.valueOf(aDistance[j]));
+                    } else {
+                        fw.append(String.valueOf(aDistance[j]));
+                        fw.append(" ");
+                    }
+                }
+                fw.append("\n");
+            }
+            fw.close();
+        }
+        catch(IOException ioe){
+            //Handle exception here, most of the time you will just log it.
+        }
+
+        /*for ( int i = 0 ; i < distance.length ; i++ ) {
             for ( int j = 0 ; j < distance[i].length ; j++ ){
                 System.out.print(new DecimalFormat("#0.00").format(distance[i][j])+" ");
             }
             System.out.println();
-        }
+        }*/
     }
     public void printWeightings()
     {
-        for ( int i = 0 ; i < weightings.length ; i++ ) {
+        try{
+            //All your IO Operations
+            FileWriter fw = new FileWriter("weighting.csv");
+            for (int index = 0; index < weightings.length; index++)
+            {
+                for ( int j = 0 ; j < weightings[index].length ; j++) {
+
+                    if (j == weightings[index].length - 1)
+                    {
+                        fw.append(String.valueOf(weightings[index][j]));
+                    }
+                    else
+                    {
+                        fw.append(String.valueOf(weightings[index][j]));
+                        fw.append(" ");
+                    }
+                }
+                fw.append("\n");
+            }
+            fw.close();
+        }
+        catch(IOException ioe){
+            //Handle exception here, most of the time you will just log it.
+        }
+
+
+        /*for ( int i = 0 ; i < weightings.length ; i++ ) {
             for ( int j = 0 ; j < weightings[i].length ; j++ ){
                 System.out.print(new DecimalFormat("#0.00").format(weightings[i][j])+" ");
             }
             System.out.println();
-        }
+        }*/
     }
 
     public void printFeatureWeighting() {
-        for ( int i = 0 ; i < featureWeighting.length ; i++ ) {
+
+        try{
+            //All your IO Operations
+            FileWriter fw = new FileWriter("FeatureWeighting.csv");
+            for (int index = 0; index < featureWeighting.length; index++)
+            {
+                if (index == rating.size() - 1)
+                {
+                    fw.append(String.valueOf(featureWeighting[index]));
+                }
+                else
+                {
+                    fw.append(String.valueOf(featureWeighting[index]));
+                    fw.append(" ");
+                }
+            }
+            fw.append("\n");
+            fw.close();
+        }
+        catch(IOException ioe){
+            //Handle exception here, most of the time you will just log it.
+        }
+        /*for ( int i = 0 ; i < featureWeighting.length ; i++ ) {
             System.out.print(new DecimalFormat("#0.00").format(featureWeighting[i])+" ");
         }
-        System.out.println();
+        System.out.println();*/
     }
 
     public double getMSE()
     {
+
         double error = 0;
         for ( int i = 0 ; i < rating.size() ; i++ ) {
             error += SQR(rating.get(i) - predictedRating.get(i));
