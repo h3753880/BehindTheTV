@@ -286,4 +286,18 @@ public class Normal {
             System.out.println();
         }
     }
+
+    /**
+     * get all tv show titles
+     * @return titles
+     */
+    public ArrayList<String> getTitles() {
+        ArrayList<String> titles = new ArrayList<>();
+
+        for(Show s: this.shows) {
+            titles.add(s.getTitle());
+        }
+
+        return titles;
+    }
 }
