@@ -278,6 +278,8 @@ public class Normal {
     }
 
     public void printMat() {
+        System.out.println("row = " + mat.length);
+        System.out.println("col = " + mat[0].length);
         for(int i=0; i<mat.length; i++) {
             for (int j = 0; j < mat[i].length; j++)
                 System.out.print(mat[i][j] + " ");
