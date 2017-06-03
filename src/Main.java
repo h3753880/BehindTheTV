@@ -7,11 +7,11 @@ import java.util.Map;
 import java.util.Iterator;
 import java.util.Set;
 /**
- *
  * Normal.getMap -> get attribute name by matrix col index
  * Normal.getGenMap -> get matrix col index by attribute name
  * Normal.getMat -> get matrix
  * Normal.getRating -> get rating
+ * Normal.getTitles -> get all titles
  */
 public class Main {
     public static void main(String[] args) {
