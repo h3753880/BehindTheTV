@@ -2,6 +2,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Created by Howard on 2017/5/30.
@@ -16,6 +17,17 @@ public class Normal {
     private ArrayList<String> channels;
 
     public Normal(ArrayList<Show> shows) {
+
+        //rating>6 && <=9.7
+        Iterator<Show> iter = shows.iterator();
+
+        while(iter.hasNext()) {
+            Show original = iter.next();
+
+            if(original.getRating() <= 6 || original.getRating() > 9.7)
+                iter.remove();
+        }
+
         this.shows = shows;
 
         rating = new ArrayList<Double>();
