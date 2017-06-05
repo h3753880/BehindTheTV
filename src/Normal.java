@@ -118,6 +118,7 @@ public class Normal {
             } else {
                 mat[i][genMap.get(shows.get(i).getNetwork())] = 1;
             }
+
         }
     }
 
@@ -194,13 +195,13 @@ public class Normal {
     }
 
     public void createMapping() {
-        //genres 16
+        //genres 21
         for(String gen: genres) {
             map.put(map.size(), gen);
             genMap.put(gen, genMap.size());
         }
 
-        //13
+        //7
         map.put(map.size(), "Executive Producer");
         genMap.put("Executive Producer", genMap.size());
         map.put(map.size(), "Creator");
@@ -218,10 +219,19 @@ public class Normal {
         map.put(map.size(), "duration");
         genMap.put("duration", genMap.size());
 
-        // 17 channel
+        // 67 channel
+        int count = 0;
         for(String chan: channels) {
-            map.put(map.size(), chan);//network webChannel
-            genMap.put(chan, genMap.size());
+            //network webChannel
+
+            if(!genMap.containsKey(chan)) {
+                map.put(map.size(), chan);
+                genMap.put(chan, genMap.size());
+            }
+            else {
+                genMap.put(chan + count, genMap.size());
+                map.put(map.size(), chan + count);
+            }
         }
 
         map.put(map.size(), "numSeason");
