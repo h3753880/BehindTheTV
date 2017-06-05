@@ -18,7 +18,7 @@ public class NelderMead
 {
 
 
-    static private final int MAXITER = 3000;
+    static private final int MAXITER = 10000;
     static private int ncalls = 0;
     static private final double TOL = 1E-6;
 
@@ -351,11 +351,11 @@ public class NelderMead
             {
                 if (index == rating.size() - 1)
                 {
-                    fw.append(String.valueOf(rating.get(index)));
+                    fw.append(String.valueOf(rating.get(index))+"\n");
                 }
                 else
                 {
-                    fw.append(String.valueOf(rating.get(index)));
+                    fw.append(String.valueOf(rating.get(index))+"\n");
                     fw.append(" ");
                 }
             }
@@ -380,11 +380,11 @@ public class NelderMead
             {
                 if (index == rating.size() - 1)
                 {
-                    fw.append(String.valueOf(predictedRating.get(index)));
+                    fw.append(String.valueOf(predictedRating.get(index))+"\n");
                 }
                 else
                 {
-                    fw.append(String.valueOf(predictedRating.get(index)));
+                    fw.append(String.valueOf(predictedRating.get(index))+"\n");
                     fw.append(" ");
                 }
             }
@@ -397,6 +397,30 @@ public class NelderMead
         /*for (double d : predictedRating)
             System.out.print(new DecimalFormat("#0.00").format(d)+" ");
         System.out.println();*/
+    }
+    public void printMat()
+    {
+        try{
+            //All your IO Operations
+            FileWriter fw = new FileWriter("mat.csv");
+            for (double[] aMat : mat) {
+                for (int j = 0; j < aMat.length; j++) {
+
+                    if (j == aMat.length - 1) {
+                        fw.append(String.valueOf(aMat[j]));
+                    } else {
+                        fw.append(String.valueOf(aMat[j]));
+                        fw.append(" ");
+                    }
+                }
+                fw.append("\n");
+            }
+            fw.close();
+        }
+        catch(IOException ioe){
+            //Handle exception here, most of the time you will just log it.
+        }
+
     }
     public void printDistance()
     {
@@ -421,12 +445,6 @@ public class NelderMead
             //Handle exception here, most of the time you will just log it.
         }
 
-        /*for ( int i = 0 ; i < distance.length ; i++ ) {
-            for ( int j = 0 ; j < distance[i].length ; j++ ){
-                System.out.print(new DecimalFormat("#0.00").format(distance[i][j])+" ");
-            }
-            System.out.println();
-        }*/
     }
     public void printWeightings()
     {
@@ -473,11 +491,11 @@ public class NelderMead
             {
                 if (index == rating.size() - 1)
                 {
-                    fw.append(String.valueOf(featureWeighting[index]));
+                    fw.append(String.valueOf(featureWeighting[index])+"\n");
                 }
                 else
                 {
-                    fw.append(String.valueOf(featureWeighting[index]));
+                    fw.append(String.valueOf(featureWeighting[index])+"\n");
                     fw.append(" ");
                 }
             }

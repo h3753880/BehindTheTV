@@ -30,9 +30,23 @@ public class Main {
         norm = new Normal(shows);
 
         norm.normFeatures();
+        ArrayList<String> titles = norm.getTitles();
+        try{
+            //All your IO Operations
+            FileWriter fw = new FileWriter("Title.csv");
+            for ( int i = 0 ; i < titles.size() ; i++ ) {
+                fw.append( i+":"+titles.get(i)+"\n" );
+            }
+            fw.append("\n");
+            fw.close();
+        }
+        catch(IOException ioe){
+            //Handle exception here, most of the time you will just log it.
+        }
+
+
         //norm.printMat();// test
-        SVD svd = new SVD(norm.getMat());
-        //svd.buildSVD();
+
         HashMap<Integer, String> hmap = norm.getMap();
         // Display content using Iterator
         Set set = hmap.entrySet();
@@ -50,10 +64,15 @@ public class Main {
         catch(IOException ioe){
             //Handle exception here, most of the time you will just log it.
         }
+        // SVD to compress the features into concepts
+        //SVD svd = new SVD(norm.getMat());
+        //svd.buildSVD();
 
-        ArrayList<Double> rating = norm.getRating();
         findFeatureWeighting = new NelderMead(norm.getMat(), norm.getRating());
+        //  dimension of input matrix has been reduced
+        //findFeatureWeighting = new NelderMead(svd.getU(), norm.getRating());
 
+        findFeatureWeighting.printMat();
         findFeatureWeighting.descend();
         findFeatureWeighting.printDistance();
         findFeatureWeighting.printWeightings();
