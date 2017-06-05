@@ -27,6 +27,7 @@ public class Main {
         norm = new Normal(shows);
 
         norm.normFeatures();
+
         //norm.printMat();// test
         SVD svd = new SVD(norm.getMat());
         //svd.buildSVD();
