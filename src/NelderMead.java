@@ -366,9 +366,6 @@ public class NelderMead
             //Handle exception here, most of the time you will just log it.
         }
 
-        /*for (double d : rating)
-            System.out.print(new DecimalFormat("#0.00").format(d)+" ");
-        System.out.println();*/
     }
     public void printPredictedRating()
     {
@@ -394,9 +391,6 @@ public class NelderMead
         catch(IOException ioe){
             //Handle exception here, most of the time you will just log it.
         }
-        /*for (double d : predictedRating)
-            System.out.print(new DecimalFormat("#0.00").format(d)+" ");
-        System.out.println();*/
     }
     public void printMat()
     {
@@ -472,14 +466,6 @@ public class NelderMead
         catch(IOException ioe){
             //Handle exception here, most of the time you will just log it.
         }
-
-
-        /*for ( int i = 0 ; i < weightings.length ; i++ ) {
-            for ( int j = 0 ; j < weightings[i].length ; j++ ){
-                System.out.print(new DecimalFormat("#0.00").format(weightings[i][j])+" ");
-            }
-            System.out.println();
-        }*/
     }
 
     public void printFeatureWeighting() {
@@ -505,10 +491,6 @@ public class NelderMead
         catch(IOException ioe){
             //Handle exception here, most of the time you will just log it.
         }
-        /*for ( int i = 0 ; i < featureWeighting.length ; i++ ) {
-            System.out.print(new DecimalFormat("#0.00").format(featureWeighting[i])+" ");
-        }
-        System.out.println();*/
     }
 
     public double getMSE()
