@@ -222,12 +222,16 @@ public class Normal {
         // 67 channel
         int count = 0;
         for(String chan: channels) {
-            map.put(map.size(), chan);//network webChannel
+            //network webChannel
 
-            if(!genMap.containsKey(chan))
+            if(!genMap.containsKey(chan)) {
+                map.put(map.size(), chan);
                 genMap.put(chan, genMap.size());
-            else
-                genMap.put(chan+count, genMap.size());
+            }
+            else {
+                genMap.put(chan + count, genMap.size());
+                map.put(map.size(), chan + count);
+            }
         }
 
         map.put(map.size(), "numSeason");
