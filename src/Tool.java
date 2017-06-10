@@ -67,6 +67,13 @@ public class Tool {
         double min = Collections.min(orginals);
         ArrayList<Double> results = new ArrayList<>();
 
+        if(max-min == 0)
+        {
+            for(int i=0; i<orginals.size(); i++)
+                results.add(0.0);
+            return results;
+        }
+
         for(double v: orginals) {
             results.add( (v-min) / (max-min) );
         }

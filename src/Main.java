@@ -15,6 +15,7 @@ import java.util.ListIterator;
  * Normal.getGenMap -> get matrix col index by attribute name
  * Normal.getMat -> get matrix
  * Normal.getRating -> get rating
+ * Normal.getImdbRating -> get imdb rating
  * Normal.getTitles -> get all titles
  */
 public class Main {

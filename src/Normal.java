@@ -11,6 +11,7 @@ public class Normal {
     private ArrayList<Show> shows;
     private double[][] mat;
     private ArrayList<Double> rating;
+    private ArrayList<Double> imdbRating;
     private HashMap<Integer, String> map;
     private HashMap<String, Integer> genMap;
     private ArrayList<String> genres;
@@ -18,24 +19,34 @@ public class Normal {
 
     public Normal(ArrayList<Show> shows) {
 
-        //rating>6 && <=9.7
+        //rating>6 && <=9.7 && vote <1000
         Iterator<Show> iter = shows.iterator();
 
         while(iter.hasNext()) {
             Show original = iter.next();
 
-            if(original.getRating() <= 6 || original.getRating() > 9.7)
+            if(original.getImdbVotes() < 1000)
+                iter.remove();
+            else if(original.getRating() <= 6 || original.getRating() > 9.7)
+                iter.remove();
+            else if(original.getImdbRating() <=6 || original.getImdbRating() >9.7)
                 iter.remove();
         }
+
+        // get X5
+        while(shows.size() % 5 !=0)
+            shows.remove(shows.size()-1);
+
 
         this.shows = shows;
 
         rating = new ArrayList<Double>();
+        imdbRating = new ArrayList<Double>();
         map = new HashMap<>();
         genMap = new HashMap<>();
         genres = Tool.readFileByLine("genre.txt");
         channels = Tool.readFileByLine("net.txt");
-        mat = new double[shows.size()][13+genres.size()+channels.size()];
+        mat = new double[shows.size()][21+genres.size()+channels.size()];
     }
 
     public void normFeatures() {
@@ -49,9 +60,18 @@ public class Normal {
         ArrayList<Double> act1 = new ArrayList<>();
         ArrayList<Double> act2 = new ArrayList<>();
         ArrayList<Double> act3 = new ArrayList<>();
+        ArrayList<Double> actPos = new ArrayList<>();
+        ArrayList<Double> actNeg = new ArrayList<>();
+        ArrayList<Double> wrtPos = new ArrayList<>();
+        ArrayList<Double> wrtNeg = new ArrayList<>();
+        ArrayList<Double> crePos = new ArrayList<>();
+        ArrayList<Double> creNeg = new ArrayList<>();
+        ArrayList<Double> proPos = new ArrayList<>();
+        ArrayList<Double> proNeg = new ArrayList<>();
 
         // create rating array
         setRating();
+        setImdbRating();
 
         createMapping();
 
@@ -79,6 +99,14 @@ public class Normal {
             act1.add(mat[i][genMap.get("Actor1")]);
             act2.add(mat[i][genMap.get("Actor2")]);
             act3.add(mat[i][genMap.get("Actor3")]);
+            actPos.add(mat[i][genMap.get("actorPosReview")]);
+            actNeg.add(mat[i][genMap.get("actorNegReview")]);
+            wrtPos.add(mat[i][genMap.get("writerPosReview")]);
+            wrtNeg.add(mat[i][genMap.get("writerNegReview")]);
+            crePos.add(mat[i][genMap.get("creatorPosReview")]);
+            creNeg.add(mat[i][genMap.get("creatorNegReview")]);
+            proPos.add(mat[i][genMap.get("producerPosReview")]);
+            proNeg.add(mat[i][genMap.get("producerNegReview")]);
         }
 
         prods = Tool.scaling(prods);
@@ -90,6 +118,15 @@ public class Normal {
         act1 = Tool.scaling(act1);
         act2 = Tool.scaling(act2);
         act3 = Tool.scaling(act3);
+        actPos = Tool.scaling(actPos);
+        actNeg = Tool.scaling(actNeg);
+        wrtPos = Tool.scaling(wrtPos);
+        wrtNeg = Tool.scaling(wrtNeg);
+        crePos = Tool.scaling(crePos);
+        creNeg = Tool.scaling(creNeg);
+        proPos = Tool.scaling(proPos);
+        proNeg = Tool.scaling(proNeg);
+
 
         for(int i=0; i<shows.size(); i++) {
             mat[i][genMap.get("Executive Producer")] = Double.parseDouble(df.format(prods.get(i)));
@@ -101,11 +138,18 @@ public class Normal {
             mat[i][genMap.get("Actor1")] = Double.parseDouble(df.format(act1.get(i)));
             mat[i][genMap.get("Actor2")] = Double.parseDouble(df.format(act2.get(i)));
             mat[i][genMap.get("Actor3")] = Double.parseDouble(df.format(act3.get(i)));
-
+            mat[i][genMap.get("actorPosReview")] = Double.parseDouble(df.format(actPos.get(i)));
+            mat[i][genMap.get("actorNegReview")] = Double.parseDouble(df.format(actNeg.get(i)));
+            mat[i][genMap.get("writerPosReview")] = Double.parseDouble(df.format(wrtPos.get(i)));
+            mat[i][genMap.get("writerNegReview")] = Double.parseDouble(df.format(wrtNeg.get(i)));
+            mat[i][genMap.get("creatorPosReview")] = Double.parseDouble(df.format(crePos.get(i)));
+            mat[i][genMap.get("creatorNegReview")] = Double.parseDouble(df.format(creNeg.get(i)));
+            mat[i][genMap.get("producerPosReview")] = Double.parseDouble(df.format(proPos.get(i)));
+            mat[i][genMap.get("producerNegReview")] = Double.parseDouble(df.format(proNeg.get(i)));
         }
     }
 
-    public void createRelease() {
+    private void createRelease() {
         int season = 0;
 
         for(int i=0; i<shows.size(); i++) {
@@ -123,7 +167,7 @@ public class Normal {
         }
     }
 
-    public void createChannel() {
+    private void createChannel() {
         for(int i=0; i<shows.size(); i++) {
             if(shows.get(i).getWebChannel() != null && !shows.get(i).getWebChannel().equals("")) {
                 mat[i][genMap.get(shows.get(i).getWebChannel())] = 1;
@@ -134,7 +178,7 @@ public class Normal {
         }
     }
 
-    public void createPeople() {
+    private void createPeople() {
         ArrayList<Cast> casts = null;
         ArrayList<Cast> actors = new ArrayList<>();
         double producer = 0;
@@ -143,6 +187,12 @@ public class Normal {
         int countCrea = 0;
         double novel = 0;
         int countNov = 0;
+        int ProducerPos = 0;
+        int ProducerNeg = 0;
+        int CreatorPos = 0;
+        int CreatorNeg = 0;
+        int WriterPos = 0;
+        int WriterNeg = 0;
 
         for(int i=0; i<shows.size(); i++) {
             casts = shows.get(i).getPeople();
@@ -155,28 +205,43 @@ public class Normal {
                     case "Executive Producer":
                         countPord++;
                         producer += c.getFollowers();
+                        ProducerPos = c.getPositive_review();
+                        ProducerNeg = c.getNegative_review();
                         break;
                     case "Creator":
                         countCrea++;
                         creator += c.getFollowers();
+                        CreatorPos = c.getPositive_review();
+                        CreatorNeg = c.getNegative_review();
                         break;
                     case "Based on the Novel Of":
                         countNov++;
                         novel += c.getFollowers();
+                        WriterPos = c.getPositive_review();
+                        WriterNeg = c.getNegative_review();
                         break;
                 }
             }
 
             // for producer
-            if(countPord != 0)
-                mat[i][genMap.get("Executive Producer")] = producer/countPord;
+            if(countPord != 0) {
+                mat[i][genMap.get("Executive Producer")] = producer / countPord;
+                mat[i][genMap.get("producerPosReview")] = ProducerPos;
+                mat[i][genMap.get("producerNegReview")] = ProducerNeg;
+            }
 
             // for creator
-            if(countCrea != 0)
-                mat[i][genMap.get("Creator")] = creator/countCrea;
+            if(countCrea != 0) {
+                mat[i][genMap.get("Creator")] = creator / countCrea;
+                mat[i][genMap.get("creatorPosReview")] = CreatorPos;
+                mat[i][genMap.get("creatorNegReview")] = CreatorNeg;
+            }
 
-            if(countNov != 0)
-                mat[i][genMap.get("Based on the Novel Of")] = novel/countNov;
+            if(countNov != 0) {
+                mat[i][genMap.get("Based on the Novel Of")] = novel / countNov;
+                mat[i][genMap.get("writerPosReview")] = WriterPos;
+                mat[i][genMap.get("writerNegReview")] = WriterNeg;
+            }
 
             // sort followers
             Collections.sort(actors, (c1, c2) -> c2.getFollowers() - c1.getFollowers());
@@ -184,6 +249,8 @@ public class Normal {
             // for actors 1 2 3
             for(int count = 1; count<=3; count ++) {
                 mat[i][genMap.get("Actor" + count)] = actors.get(count - 1).getFollowers();
+                mat[i][genMap.get("actorPosReview")] += actors.get(count - 1).getPositive_review();
+                mat[i][genMap.get("actorNegReview")] += actors.get(count - 1).getNegative_review();
             }
 
 
@@ -195,7 +262,7 @@ public class Normal {
     }
 
 
-    public void createGenre() {
+    private void createGenre() {
         for(int i=0; i<shows.size(); i++) {
             String[] gens = shows.get(i).getGenre();
 
@@ -206,14 +273,14 @@ public class Normal {
         }
     }
 
-    public void createMapping() {
+    private void createMapping() {
         //genres 21
         for(String gen: genres) {
             map.put(map.size(), gen);
             genMap.put(gen, genMap.size());
         }
 
-        //7
+        //7 + 8
         map.put(map.size(), "Executive Producer");
         genMap.put("Executive Producer", genMap.size());
         map.put(map.size(), "Creator");
@@ -231,6 +298,26 @@ public class Normal {
         map.put(map.size(), "duration");
         genMap.put("duration", genMap.size());
 
+        map.put(map.size(), "actorPosReview");
+        genMap.put("actorPosReview", genMap.size());
+        map.put(map.size(), "actorNegReview");
+        genMap.put("actorNegReview", genMap.size());
+
+        map.put(map.size(), "writerPosReview");
+        genMap.put("writerPosReview", genMap.size());
+        map.put(map.size(), "writerNegReview");
+        genMap.put("writerNegReview", genMap.size());
+
+        map.put(map.size(), "creatorPosReview");
+        genMap.put("creatorPosReview", genMap.size());
+        map.put(map.size(), "creatorNegReview");
+        genMap.put("creatorNegReview", genMap.size());
+
+        map.put(map.size(), "producerPosReview");
+        genMap.put("producerPosReview", genMap.size());
+        map.put(map.size(), "producerNegReview");
+        genMap.put("producerNegReview", genMap.size());
+
         // 67 channel
         int count = 0;
         for(String chan: channels) {
@@ -246,6 +333,7 @@ public class Normal {
             }
         }
 
+        //6
         map.put(map.size(), "numSeason");
         genMap.put("numSeason", genMap.size());
         map.put(map.size(), "avgNumOfEp");
@@ -261,9 +349,15 @@ public class Normal {
         genMap.put("winterRel", genMap.size());
     }
 
-    public void setRating() {
+    private void setRating() {
         for(Show item: this.shows) {
             rating.add(item.getRating());
+        }
+    }
+
+    private void setImdbRating() {
+        for(Show item: this.shows) {
+            this.imdbRating.add(item.getRating());
         }
     }
 
@@ -297,6 +391,14 @@ public class Normal {
      */
     public ArrayList<Double> getRating() {
         return rating;
+    }
+
+    /**
+     * get imdb rating
+     * @return ArrayList<Double> with rating
+     */
+    public ArrayList<Double> getImdbRating() {
+        return this.imdbRating;
     }
 
     public void printMat() {
