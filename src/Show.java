@@ -1,9 +1,7 @@
 import java.util.ArrayList;
 
-/**
- * Created by Howard on 2017/5/25.
- */
 public class Show {
+
     private String[] genre;
     private ArrayList<Cast> people;
     private int duration;
@@ -15,7 +13,24 @@ public class Show {
     private String title;
     private int numSeason;
     private double avgNumOfEp;
+    private double imdbRating;
+    private int imdbVotes;
 
+    public double getImdbRating() {
+        return imdbRating;
+    }
+
+    public void setImdbRating(double imdbRating) {
+        this.imdbRating = imdbRating;
+    }
+
+    public int getImdbVotes() {
+        return imdbVotes;
+    }
+
+    public void setImdbVotes(int imdbVotes) {
+        this.imdbVotes = imdbVotes;
+    }
     public int getNumSeason() {
         return numSeason;
     }
