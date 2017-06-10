@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.ListIterator;
 /**
  * Normal.getMap -> get attribute name by matrix col index
  * Normal.getGenMap -> get matrix col index by attribute name
@@ -49,20 +50,56 @@ public class Main {
         catch(IOException ioe){
             //Handle exception here, most of the time you will just log it.
         }
+        ArrayList<String> titles = norm.getTitles();
+        try{
+            //All your IO Operations
+            FileWriter fw = new FileWriter("Title.csv");
+            for ( int i = 0 ; i < titles.size() ; i++ )
+                fw.append(String.valueOf(i+1)+":"+String.valueOf(titles.get(i))+"\n" );
+            fw.append("\n");
+            fw.close();
+        }
+        catch(IOException ioe){
+            //Handle exception here, most of the time you will just log it.
+        }
+        int kFold = 1;  // k-fold cross-validation
+        long time1, time2, time3;
 
-        //SVD svd = new SVD(norm.getMat());
-        //svd.buildSVD();
-        //findFeatureWeighting = new NelderMead(svd.getU(), norm.getRating());
 
-        findFeatureWeighting = new NelderMead(norm.getMat(), norm.getRating());
-        findFeatureWeighting.descend();
-        findFeatureWeighting.printRating();
-        findFeatureWeighting.printPredictedRating();
 
-        System.out.println("MSE = "+findFeatureWeighting.getMSE());
-        findFeatureWeighting.printDistance();
-        findFeatureWeighting.printWeightings();
-        findFeatureWeighting.printFeatureWeighting();
+        time1 = System.currentTimeMillis();
+
+        // doSomething()
+        SVD svd = new SVD(norm.getMat());
+        svd.buildSVD();
+        svd.printU();
+        svd.printUW();
+
+
+        // doAnotherthing()
+        double[][] formerResult = svd.getUW();
+        //System.out.print(formerResult[0].length);
+        double[][] testMat = new double[90][formerResult[0].length];
+        for ( int i = 0 ; i < testMat.length ; i++ ){
+            for ( int j = 0 ; j < testMat[i].length ; j++ ){
+                testMat[i][j] = formerResult[i][j];
+            }
+        }
+        time2 = System.currentTimeMillis();
+        Prediction predictiveModel = new Prediction(norm.getMat(), norm.getRating(), kFold);
+        //Prediction predictiveModel = new Prediction(testMat, norm.getRating(), kFold);
+        predictiveModel.predict();
+        double result = predictiveModel.getMeanSquaredError();
+        //predictiveModel.printComparison();
+        System.out.println("MSE = "+result);
+
+        time3 = System.currentTimeMillis();
+
+
+        System.out.println("SVD花了：" + (time2-time1)/1000 + "秒");
+
+        System.out.println("Prediction花了：" + (time3-time2)/1000 + "秒");
+
 
         //System.out.println(gson.toJson(shows)); //test
     }

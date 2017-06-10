@@ -18,11 +18,11 @@ public class NelderMead
 {
 
 
-    static private final int MAXITER = 10000;
+    static private int MAXITER = 0;
     static private int ncalls = 0;
     static private final double TOL = 1E-6;
 
-    static private final double LAMBDA = 0.0;
+    static private final double LAMBDA = 0.003;
     static private final double THETA = 20;
 
     static private int NDIMS;
@@ -44,10 +44,12 @@ public class NelderMead
         this.predictedRating = new ArrayList<Double>();
         for (int i = 0 ; i < rating.size() ; i++)
             predictedRating.add(0.0);
+        //System.out.println(mat[0].length);
         NDIMS = mat[0].length;
         NPTS = NDIMS + 1;
         FUNC = NDIMS;
         NTVSHOW = mat.length;
+        MAXITER = NDIMS * NTVSHOW;
         this.distance = new double[NTVSHOW][NTVSHOW];
         this.weightings = new double[NTVSHOW][NTVSHOW];
         this.featureWeighting = new double[NDIMS];
@@ -67,7 +69,7 @@ public class NelderMead
         for ( int i = 1 ; i < simplex.length ; i++ ) {
             for ( int j = 0 ; j < simplex[i].length - 1 ; j++ ) {
                 if ( i-1 != j )
-                    simplex[i][j] = 0.5;
+                    simplex[i][j] = 0.1;
             }
         }
         /*for ( int i = 0 ; i < simplex.length ; i++ ) {
@@ -115,7 +117,7 @@ public class NelderMead
             ////////// exit criterion //////////////
             //System.out.println("iter = "+iter+" NDIMS = "+NDIMS );
             //System.out.println("(iter % 4*NDIMS) = "+(iter % 4*NDIMS) );
-            if ((iter % 200*NDIMS) == 0)
+            if ((iter % (291*NDIMS)) == 0)
             {
                 if (simplex[ilo][FUNC] > (best - TOL))
                     break;
@@ -213,7 +215,7 @@ public class NelderMead
                     simplex[ihi][FUNC] = fcc;
                     continue;
                 }
-                else    ///////// contract
+                else    ///////// contraction
                 {
                     for (int i=0; i<NPTS; i++)
                         if (i != ilo)
@@ -224,9 +226,10 @@ public class NelderMead
                         }
                 }
             }
+
         }
 
-        System.out.println("ncalls, iters, Best ="+fwi(ncalls,6)+fwi(iter,6)+fwd(best,16,9));
+        System.out.println("ncalls, iters, Best ="+fwi(ncalls,6)+fwi(iter,6) + fwd(best,16,9));
 
     }
 
@@ -249,7 +252,7 @@ public class NelderMead
     {
 
         double meanSquareError = 0;
-        for ( int i = 0 ; i < NTVSHOW ; i++ ) {
+        for ( int i = 0 ; i < rating.size() ; i++ ) {
             meanSquareError += SQR(rating.get(i) - prediction(i, v));
             //System.out.println("i = "+i+": Actual raing = "+rating.get(i)+" , Predicted raing = "+prediction(i, v));
         }
@@ -511,6 +514,8 @@ public class NelderMead
     {
         return weightings;
     }
+    public double[]   getFeatureWeighting() { return featureWeighting; }
+    public double        getTheta() { return THETA;}
 
     public ArrayList<Double> getRating() {
         return predictedRating;
