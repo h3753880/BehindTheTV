@@ -26,6 +26,14 @@ Actor1
 Actor2
 Actor3
 duration
+actorPosReview
+actorNegReview
+writerPosReview
+writerNegReview
+creatorPosReview
+creatorNegReview
+producerPosReview
+producerNegReview
 TVE
 1PRVA
 BBC iPlayer

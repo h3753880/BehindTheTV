@@ -22,13 +22,15 @@ public class NelderMead
     static private int ncalls = 0;
     static private final double TOL = 1E-6;
 
-    static private final double LAMBDA = 0.003;
+    static private final double LAMBDA = 0.001;
     static private final double THETA = 20;
 
     static private int NDIMS;
     static private int NPTS;
     static private int FUNC;
     static private int NTVSHOW;
+
+    static private final int NCLOSETVSHOW = 10;
 
 
     static private double[][] mat;
@@ -37,6 +39,9 @@ public class NelderMead
     static private double[]   featureWeighting;
     static private ArrayList<Double> rating;
     static private ArrayList<Double> predictedRating;
+
+    static private double[][] closestDistance;
+    static private int[][] indexClosestDistance;
 
     public NelderMead(double[][] mat, ArrayList<Double> rating) {
         this.mat = mat;
@@ -53,6 +58,9 @@ public class NelderMead
         this.distance = new double[NTVSHOW][NTVSHOW];
         this.weightings = new double[NTVSHOW][NTVSHOW];
         this.featureWeighting = new double[NDIMS];
+
+        this.closestDistance = new double[NTVSHOW][NCLOSETVSHOW];
+        this.indexClosestDistance = new int [NTVSHOW][NCLOSETVSHOW];
     }
 
     public void descend()
@@ -69,7 +77,7 @@ public class NelderMead
         for ( int i = 1 ; i < simplex.length ; i++ ) {
             for ( int j = 0 ; j < simplex[i].length - 1 ; j++ ) {
                 if ( i-1 != j )
-                    simplex[i][j] = 0.1;
+                    simplex[i][j] = 0.2;
             }
         }
         /*for ( int i = 0 ; i < simplex.length ; i++ ) {
@@ -117,7 +125,7 @@ public class NelderMead
             ////////// exit criterion //////////////
             //System.out.println("iter = "+iter+" NDIMS = "+NDIMS );
             //System.out.println("(iter % 4*NDIMS) = "+(iter % 4*NDIMS) );
-            if ((iter % (291*NDIMS)) == 0)
+            if ((iter % (4*NDIMS)) == 0)
             {
                 if (simplex[ilo][FUNC] > (best - TOL))
                     break;
@@ -275,6 +283,8 @@ public class NelderMead
             tempDistance = 0;
         }
 
+        //buildNearnest();
+
         for ( int i = 0 ; i < NTVSHOW ; i++ ) {
             weightings[indexPredicted][i] = Math.exp(-1 * THETA * distance[indexPredicted][i]);
         }
@@ -298,6 +308,54 @@ public class NelderMead
         }
         predictedRating.set(indexPredicted, predictedResult);
         return predictedResult;
+    }
+
+    static private void buildNearnest(){
+
+        //System.out.println(closestDistance.length+" "+closestDistance[0].length);
+        //System.out.println(indexClosestDistance.length+" "+indexClosestDistance[0].length);
+        //System.out.println(distance.length);
+        double tempSmall = Double.MAX_VALUE;
+        int tempIndex = 0;
+        for ( int i = 0 ; i < distance.length ; i++ ) {
+
+            for ( int k = 0 ; k < indexClosestDistance[0].length ; k++) {
+
+                for ( int j = 0 ; j < distance[i].length ; j++ ) {
+                    if ( i == j ) {
+                        // distance(i,i) = 0
+                        continue;
+                    }
+                    else if ( k == 0 ) {
+                        if ( tempSmall > distance[i][j] ) {
+                            tempSmall = distance[i][j];
+                            tempIndex = j;
+                        }
+                    }
+                    else {
+                        if ( tempSmall > distance[i][j] && distance[i][j] > closestDistance[i][k-1] ) {
+                            tempSmall = distance[i][j];
+                            tempIndex = j;
+                        }
+                    }
+                }
+                closestDistance[i][k] = tempSmall;
+                indexClosestDistance[i][k] = tempIndex;
+
+                tempSmall = Double.MAX_VALUE;
+                tempIndex = 0;
+
+            }
+
+        }
+        /*for ( int i = 0 ; i < closestDistance.length ; i++)
+        {
+            for ( int j = 0 ; j < closestDistance[i].length ; j++ )
+            {
+                System.out.print(closestDistance[i][j]+" ");
+            }
+            System.out.println();
+        }*/
     }
 
 
@@ -345,22 +403,14 @@ public class NelderMead
         }
         return s;
     }
-    public void printRating()
+    public void printRating(int i)
     {
         try{
             //All your IO Operations
-            FileWriter fw = new FileWriter("rating.csv");
+            FileWriter fw = new FileWriter("rating"+String.valueOf(i)+".csv");
             for (int index = 0; index < rating.size(); index++)
             {
-                if (index == rating.size() - 1)
-                {
-                    fw.append(String.valueOf(rating.get(index))+"\n");
-                }
-                else
-                {
-                    fw.append(String.valueOf(rating.get(index))+"\n");
-                    fw.append(" ");
-                }
+                fw.append(String.valueOf(rating.get(index))+"\n");
             }
             fw.append("\n");
             fw.close();
@@ -370,11 +420,11 @@ public class NelderMead
         }
 
     }
-    public void printPredictedRating()
+    public void printPredictedRating(int i)
     {
         try{
             //All your IO Operations
-            FileWriter fw = new FileWriter("PredictedRating.csv");
+            FileWriter fw = new FileWriter("PredictedRating"+String.valueOf(i)+".csv");
 
             for (int index = 0; index < predictedRating.size(); index++)
             {
@@ -395,11 +445,11 @@ public class NelderMead
             //Handle exception here, most of the time you will just log it.
         }
     }
-    public void printMat()
+    public void printMat(int i)
     {
         try{
             //All your IO Operations
-            FileWriter fw = new FileWriter("mat.csv");
+            FileWriter fw = new FileWriter("mat"+String.valueOf(i)+".csv");
             for (double[] aMat : mat) {
                 for (int j = 0; j < aMat.length; j++) {
 
@@ -419,11 +469,11 @@ public class NelderMead
         }
 
     }
-    public void printDistance()
+    public void printDistance(int i)
     {
         try{
             //All your IO Operations
-            FileWriter fw = new FileWriter("distance.csv");
+            FileWriter fw = new FileWriter("distance"+String.valueOf(i)+".csv");
             for (double[] aDistance : distance) {
                 for (int j = 0; j < aDistance.length; j++) {
 
@@ -443,11 +493,11 @@ public class NelderMead
         }
 
     }
-    public void printWeightings()
+    public void printWeightings(int i)
     {
         try{
             //All your IO Operations
-            FileWriter fw = new FileWriter("weighting.csv");
+            FileWriter fw = new FileWriter("weighting"+String.valueOf(i)+".csv");
             for (int index = 0; index < weightings.length; index++)
             {
                 for ( int j = 0 ; j < weightings[index].length ; j++) {
@@ -471,11 +521,11 @@ public class NelderMead
         }
     }
 
-    public void printFeatureWeighting() {
+    public void printFeatureWeighting(int i) {
 
         try{
             //All your IO Operations
-            FileWriter fw = new FileWriter("FeatureWeighting.csv");
+            FileWriter fw = new FileWriter("FeatureWeighting"+String.valueOf(i)+".csv");
             for (int index = 0; index < featureWeighting.length; index++)
             {
                 if (index == rating.size() - 1)
