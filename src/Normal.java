@@ -19,13 +19,13 @@ public class Normal {
 
     public Normal(ArrayList<Show> shows) {
 
-        //rating>6 && <=9.7 && vote <1000
+        //rating>6 && <=9.7 && vote <500
         Iterator<Show> iter = shows.iterator();
 
         while(iter.hasNext()) {
             Show original = iter.next();
 
-            if(original.getImdbVotes() < 1000)
+            if(original.getImdbVotes() < 500)
                 iter.remove();
             else if(original.getRating() <= 6 || original.getRating() > 9.7)
                 iter.remove();
