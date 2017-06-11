@@ -32,7 +32,7 @@ public class Main {
         norm = new Normal(shows);
 
         norm.normFeatures();
-        //norm.printMat();// test
+        norm.printMat();// test
 
         HashMap<Integer, String> hmap = norm.getMap();
         // Display content using Iterator
