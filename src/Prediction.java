@@ -89,34 +89,23 @@ public class Prediction {
 
             findFeatureWeighting = new NelderMead(matTraining, ratingTraining);
 
-            /*ArrayList<Double> lambda = new ArrayList<Double>();
-            Double num = 1.0;
-            for ( int j = 0 ; j < 20; j++)
-            {
-                lambda.add(num);
-                num += 0.5;
+            findFeatureWeighting.descend();
+            findFeatureWeighting.printRating(i);
+            findFeatureWeighting.printPredictedRating(i);
+            findFeatureWeighting.printMat(i);
+            findFeatureWeighting.printFeatureWeighting(i);
+            findFeatureWeighting.printDistance(i);
+            findFeatureWeighting.printWeightings(i);
+            System.out.println("MSE = "+findFeatureWeighting.getMSE());
+            double[] v = findFeatureWeighting.getFeatureWeighting();
+
+            for (int j = 0 ; j < v.length ; j++ ) {
+                featureWeighting[i][j] = v[j];
             }
-            for ( int j = 0 ; j < lambda.size() ; j++ )
-            {*/
-                findFeatureWeighting.descend();
-                findFeatureWeighting.printRating(i);
-                findFeatureWeighting.printPredictedRating(i);
-                findFeatureWeighting.printMat(i);
-                findFeatureWeighting.printFeatureWeighting(i);
-                findFeatureWeighting.printDistance(i);
-                findFeatureWeighting.printWeightings(i);
-                System.out.println("MSE = "+findFeatureWeighting.getMSE());
-                double[] v = findFeatureWeighting.getFeatureWeighting();
 
-                for (int j = 0 ; j < v.length ; j++ ) {
-                    featureWeighting[i][j] = v[j];
-                }
+            THETA = findFeatureWeighting.getTheta();
+            error[i] = getError(v, i);
 
-                THETA = findFeatureWeighting.getTheta();
-                error[i] = getError(v);
-                //System.out.println("i = "+i+" error[i] = "+error[i]+"lambda= "+lambda.get(j));//
-                //errorTesting[i][j] = error[i];
-            //}
             printRatTrain(i);
             printRatTest(i);
 
@@ -129,8 +118,6 @@ public class Prediction {
             featureWeighting[kFold][j] = Math.sqrt(featureWeighting[kFold][j]/kFold);
         }
         printFinalFeatureWeighting();
-
-        //System.out.println("AVG MSE = "+getError(featureWeighting[kFold], findFeatureWeighting.getTheta()));
 
     }
 
@@ -180,18 +167,18 @@ public class Prediction {
         }
 
     }
-    private double getError(double v[]) {
+    private double getError(double v[], int iTimes) {
         double error = 0;
 
         for ( int i = 0 ; i < matTesting.length ; i++ ) {
-            error += SQR(ratingTesting.get(i) - predictingRating(i, v));
+            error += SQR(ratingTesting.get(i) - predictingRating(i, v, iTimes));
             System.out.println("i = "+i+": Actual raing = "+ratingTesting.get(i)+" , Predicted raing = "+predictedRating[i]);
         }
         error /= matTesting.length;
         return error;
     }
 
-    static double predictingRating(int indexPredicted, double v[])
+    static double predictingRating(int indexPredicted, double v[], int iTimes)
     {
         double tempDistance = 0;
 
@@ -228,6 +215,7 @@ public class Prediction {
             //}
         }
         predictedRating[indexPredicted] = predictedResult;
+        finalPredictedRating[((indexPredicted + (iTimes+1) * numTraining) % m.length))] = predictedResult;
         return predictedResult;
     }
 
@@ -278,73 +266,7 @@ public class Prediction {
             //Handle exception here, most of the time you will just log it.
         }
     }
-/*
-    public double getAvgMeanSquaredError()
-    {
-        double error = 0;
-        for ( int i = 0 ; i < rating.size() ; i++ ) {
-            error += SQR(rating.get(i) - predictedFinalRating(i));
-        }
-        printFinalPredictedRating();
-        error /= rating.size();
-        return error;
-    }
 
-    private double predictedFinalRating(int indexPredicted) {
-        double tempDistance = 0;
-
-        for ( int i = 0 ; i < m.length ; i++ ) {
-            if ( i == indexPredicted )
-                continue;
-            for ( int j = 0 ; j < m[i].length ; j++ ) {
-                tempDistance += SQR(featureWeighting[kFold][j] * (m[indexPredicted][j] - m[i][j]) );
-            }
-            finalDistance[indexPredicted][i] = Math.sqrt(tempDistance);
-            tempDistance = 0;
-        }
-
-        for ( int i = 0 ; i < m.length ; i++ ) {
-            finalWeightings[indexPredicted][i] = Math.exp(-1 * THETA * finalDistance[indexPredicted][i]);
-        }
-        double sum = 0;
-        for ( int i = 0 ; i < m.length ; i++ ) {
-            if ( i != indexPredicted ) {
-                sum += finalWeightings[indexPredicted][i];
-            }
-        }
-        for ( int i = 0 ; i < m.length ; i++ ) {
-            if ( i != indexPredicted ) {
-                finalWeightings[indexPredicted][i] /= sum;
-            }
-        }
-
-        double predictedResult = 0;
-        for ( int i = 0 ; i < m.length ; i++ ) {
-            if ( i != indexPredicted ) {
-                predictedResult += finalWeightings[indexPredicted][i] * rating.get(i);
-            }
-        }
-        finalPredictedRating[indexPredicted] = predictedResult;
-        return predictedResult;
-    }
-
-    public void printFinalPredictedRating()
-    {
-        try{
-            //All your IO Operations
-            FileWriter fw = new FileWriter("FinalPredictedRating.csv");
-
-            for (int index = 0; index < finalPredictedRating.length; index++)
-            {
-                fw.append(String.valueOf(finalPredictedRating[index])+"\n");
-            }
-            fw.append("\n");
-            fw.close();
-        }
-        catch(IOException ioe){
-            //Handle exception here, most of the time you will just log it.
-        }
-    }*/
     static String fwd(double x, int w, int d)
     // converts a double to a string with given width and decimals.
     {

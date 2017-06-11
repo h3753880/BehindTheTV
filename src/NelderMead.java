@@ -283,8 +283,6 @@ public class NelderMead
             tempDistance = 0;
         }
 
-        //buildNearnest();
-
         for ( int i = 0 ; i < NTVSHOW ; i++ ) {
             weightings[indexPredicted][i] = Math.exp(-1 * THETA * distance[indexPredicted][i]);
         }
@@ -309,65 +307,6 @@ public class NelderMead
         predictedRating.set(indexPredicted, predictedResult);
         return predictedResult;
     }
-
-    static private void buildNearnest(){
-
-        //System.out.println(closestDistance.length+" "+closestDistance[0].length);
-        //System.out.println(indexClosestDistance.length+" "+indexClosestDistance[0].length);
-        //System.out.println(distance.length);
-        double tempSmall = Double.MAX_VALUE;
-        int tempIndex = 0;
-        for ( int i = 0 ; i < distance.length ; i++ ) {
-
-            for ( int k = 0 ; k < indexClosestDistance[0].length ; k++) {
-
-                for ( int j = 0 ; j < distance[i].length ; j++ ) {
-                    if ( i == j ) {
-                        // distance(i,i) = 0
-                        continue;
-                    }
-                    else if ( k == 0 ) {
-                        if ( tempSmall > distance[i][j] ) {
-                            tempSmall = distance[i][j];
-                            tempIndex = j;
-                        }
-                    }
-                    else {
-                        if ( tempSmall > distance[i][j] && distance[i][j] > closestDistance[i][k-1] ) {
-                            tempSmall = distance[i][j];
-                            tempIndex = j;
-                        }
-                    }
-                }
-                closestDistance[i][k] = tempSmall;
-                indexClosestDistance[i][k] = tempIndex;
-
-                tempSmall = Double.MAX_VALUE;
-                tempIndex = 0;
-
-            }
-
-        }
-        /*for ( int i = 0 ; i < closestDistance.length ; i++)
-        {
-            for ( int j = 0 ; j < closestDistance[i].length ; j++ )
-            {
-                System.out.print(closestDistance[i][j]+" ");
-            }
-            System.out.println();
-        }*/
-    }
-
-
-
-
-    static double parab(double p[])
-    // simple paraboloid
-    {
-        return SQR(p[0]-2) + SQR(p[1]-20);
-    }
-
-
     /////////////////////////////////utilities ////////////////////
 
     static double SQR(double x)

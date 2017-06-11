@@ -37,6 +37,12 @@ creatorPosReview
 creatorNegReview
 producerPosReview
 producerNegReview
+numSeason
+avgNumOfEp
+springRel
+summerRel
+fallRel
+winterRel
 Chiller
 TVE
 1PRVA
@@ -167,10 +173,4 @@ OCN
 BBC America
 Syfy
 Sky Cinema
-numSeason
-avgNumOfEp
-springRel
-summerRel
-fallRel
-winterRel
 
