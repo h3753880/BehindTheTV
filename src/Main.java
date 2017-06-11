@@ -63,7 +63,7 @@ public class Main {
         catch(IOException ioe){
             //Handle exception here, most of the time you will just log it.
         }
-        int kFold = 5;  // k-fold cross-validation
+        int kFold = 2;  // k-fold cross-validation
         long time1, time2, time3;
 
 
@@ -73,7 +73,7 @@ public class Main {
         // doSomething()
 
 
-        double[][] mat_full_attribute = norm.getMat();
+        double[][] mat = norm.getMat();
         //double[][] mat = svd.getU();
         double[][] matContent = new double[mat.length][45];
         for ( int i = 0 ; i < matContent.length ; i++ ) {
@@ -92,6 +92,8 @@ public class Main {
         Prediction predictiveModel = new Prediction(svd.getU(), norm.getImdbRating(), kFold);
         //Prediction predictiveModel = new Prediction(formerResult, norm.getImdbRating(), kFold);
         predictiveModel.predict();
+        double[] finalPredictedRating = predictiveModel.getFinalPredictedRating();
+
 
         double result = predictiveModel.getMeanSquaredError();
         System.out.println("Avg MSE = "+result);

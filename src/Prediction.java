@@ -90,12 +90,12 @@ public class Prediction {
             findFeatureWeighting = new NelderMead(matTraining, ratingTraining);
 
             findFeatureWeighting.descend();
-            findFeatureWeighting.printRating(i);
-            findFeatureWeighting.printPredictedRating(i);
-            findFeatureWeighting.printMat(i);
-            findFeatureWeighting.printFeatureWeighting(i);
-            findFeatureWeighting.printDistance(i);
-            findFeatureWeighting.printWeightings(i);
+            //findFeatureWeighting.printRating(i);
+            //findFeatureWeighting.printPredictedRating(i);
+            //findFeatureWeighting.printMat(i);
+            //findFeatureWeighting.printFeatureWeighting(i);
+            //findFeatureWeighting.printDistance(i);
+            //findFeatureWeighting.printWeightings(i);
             System.out.println("MSE = "+findFeatureWeighting.getMSE());
             double[] v = findFeatureWeighting.getFeatureWeighting();
 
@@ -118,6 +118,8 @@ public class Prediction {
             featureWeighting[kFold][j] = Math.sqrt(featureWeighting[kFold][j]/kFold);
         }
         printFinalFeatureWeighting();
+        printFinalPredictedRating();
+        printActualRating();
 
     }
 
@@ -215,13 +217,48 @@ public class Prediction {
             //}
         }
         predictedRating[indexPredicted] = predictedResult;
-        finalPredictedRating[((indexPredicted + (iTimes+1) * numTraining) % m.length))] = predictedResult;
+        finalPredictedRating[((indexPredicted + (iTimes+1) * numTraining) % m.length)] = predictedResult;
         return predictedResult;
     }
 
     static double SQR(double x)
     {
         return x*x;
+    }
+
+    public double[] getFinalPredictedRating(){
+        return finalPredictedRating;
+    }
+
+    static void printFinalPredictedRating(){
+        try{
+            //All your IO Operations
+            FileWriter fw = new FileWriter("Final_Predicted_Rating.csv");
+            for (int index = 0; index < finalPredictedRating.length; index++)
+            {
+                fw.append(String.valueOf(finalPredictedRating[index])+"\n");
+            }
+            fw.append("\n");
+            fw.close();
+        }
+        catch(IOException ioe){
+            //Handle exception here, most of the time you will just log it.
+        }
+    }
+    static void printActualRating() {
+        try{
+            //All your IO Operations
+            FileWriter fw = new FileWriter("Actual_Rating.csv");
+            for (int index = 0; index < rating.size(); index++)
+            {
+                fw.append(String.valueOf(rating.get(index))+"\n");
+            }
+            fw.append("\n");
+            fw.close();
+        }
+        catch(IOException ioe){
+            //Handle exception here, most of the time you will just log it.
+        }
     }
 
     public double getMeanSquaredError()
