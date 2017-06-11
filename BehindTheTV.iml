@@ -11,5 +11,6 @@
     <orderEntry type="library" name="ejml-v0" level="project" />
     <orderEntry type="library" name="ejml-cdense-0.31" level="project" />
     <orderEntry type="library" name="Jama-1.0.3" level="project" />
+    <orderEntry type="library" name="Jama-1.0.2" level="project" />
   </component>
 </module>
