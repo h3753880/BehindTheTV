@@ -34,6 +34,9 @@ public class Prediction {
     private double[]   finalPredictedRating;
 
     static private double THETA;
+    private static int count1=0;
+    private static int count2=0;
+    private static int count3=0;
 
     //static private double[][] errorTesting;
 
@@ -124,10 +127,9 @@ public class Prediction {
 
 
     private void printFinalFeatureWeighting() {
-
         try{
             //All your IO Operations
-            FileWriter fw = new FileWriter("FinalFeatureWeighting.csv");
+            FileWriter fw = new FileWriter("FinalFeatureWeighting"+ count1 +".csv");
             for (int index = 0; index < featureWeighting[kFold].length; index++)
             {
                 fw.append(String.valueOf(featureWeighting[kFold][index])+"\n");
@@ -138,6 +140,8 @@ public class Prediction {
         catch(IOException ioe){
             //Handle exception here, most of the time you will just log it.
         }
+
+        count1++;
     }
 
     private void buildMatTraining(int iTimes){
@@ -232,7 +236,7 @@ public class Prediction {
     void printFinalPredictedRating(){
         try{
             //All your IO Operations
-            FileWriter fw = new FileWriter("Final_Predicted_Rating.csv");
+            FileWriter fw = new FileWriter("Final_Predicted_Rating"+count2+".csv");
             for (int index = 0; index < finalPredictedRating.length; index++)
             {
                 fw.append(String.valueOf(finalPredictedRating[index])+"\n");
@@ -243,11 +247,13 @@ public class Prediction {
         catch(IOException ioe){
             //Handle exception here, most of the time you will just log it.
         }
+
+        count2++;
     }
     void printActualRating() {
         try{
             //All your IO Operations
-            FileWriter fw = new FileWriter("Actual_Rating.csv");
+            FileWriter fw = new FileWriter("Actual_Rating"+count3+".csv");
             for (int index = 0; index < rating.size(); index++)
             {
                 fw.append(String.valueOf(rating.get(index))+"\n");
@@ -258,6 +264,7 @@ public class Prediction {
         catch(IOException ioe){
             //Handle exception here, most of the time you will just log it.
         }
+        count3++;
     }
 
     double getMeanSquaredError()
