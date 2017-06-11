@@ -32,7 +32,7 @@ public class Main {
         norm = new Normal(shows);
 
         norm.normFeatures();
-        norm.printMat();// test
+        //norm.printMat();// test
 
         HashMap<Integer, String> hmap = norm.getMap();
         // Display content using Iterator
@@ -63,7 +63,7 @@ public class Main {
         catch(IOException ioe){
             //Handle exception here, most of the time you will just log it.
         }
-        int kFold = 2;  // k-fold cross-validation
+        int kFold = 5;  // k-fold cross-validation
         long time1, time2, time3;
 
 

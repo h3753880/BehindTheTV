@@ -30,7 +30,7 @@ public class NelderMead
     static private int FUNC;
     static private int NTVSHOW;
 
-    static private final int NCLOSETVSHOW = 10;
+    //static private final int NCLOSETVSHOW = 10;
 
 
     static private double[][] mat;
@@ -40,8 +40,8 @@ public class NelderMead
     static private ArrayList<Double> rating;
     static private ArrayList<Double> predictedRating;
 
-    static private double[][] closestDistance;
-    static private int[][] indexClosestDistance;
+    //static private double[][] closestDistance;
+    //static private int[][] indexClosestDistance;
 
     public NelderMead(double[][] mat, ArrayList<Double> rating) {
         this.mat = mat;
@@ -59,14 +59,14 @@ public class NelderMead
         this.weightings = new double[NTVSHOW][NTVSHOW];
         this.featureWeighting = new double[NDIMS];
 
-        this.closestDistance = new double[NTVSHOW][NCLOSETVSHOW];
-        this.indexClosestDistance = new int [NTVSHOW][NCLOSETVSHOW];
+        //this.closestDistance = new double[NTVSHOW][NCLOSETVSHOW];
+        //this.indexClosestDistance = new int [NTVSHOW][NCLOSETVSHOW];
     }
 
     public void descend()
     {
         ////// set up the starting simplex //////////////////
-        System.out.println("NTVSHOW = "+mat.length+" NFEATURE = "+mat[0].length);
+        //System.out.println("NTVSHOW = "+mat.length+" NFEATURE = "+mat[0].length);
         //System.out.println("rating len = "+rating.size());
         double simplex[][] = new double[NPTS][NPTS]; // [row][col] = [whichvx][coord,FUNC]
 
@@ -93,7 +93,7 @@ public class NelderMead
         for (int i=0; i<NPTS; i++)
             simplex[i][FUNC] = func(simplex[i]);
 
-        System.out.println("ncalls = "+fwi(ncalls,6));
+        //System.out.println("ncalls = "+fwi(ncalls,6));
         int iter=0;
 
         for (iter=1; iter<MAXITER; iter++)
@@ -237,7 +237,7 @@ public class NelderMead
 
         }
 
-        System.out.println("ncalls, iters, Best ="+fwi(ncalls,6)+fwi(iter,6) + fwd(best,16,9));
+        //System.out.println("ncalls, iters, Best ="+fwi(ncalls,6)+fwi(iter,6) + fwd(best,16,9));
 
     }
 
@@ -504,7 +504,7 @@ public class NelderMead
         return weightings;
     }
     public double[]   getFeatureWeighting() { return featureWeighting; }
-    public double        getTheta() { return THETA;}
+    public double     getTheta() { return THETA;}
 
     public ArrayList<Double> getRating() {
         return predictedRating;

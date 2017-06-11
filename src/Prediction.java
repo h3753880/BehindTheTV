@@ -82,10 +82,10 @@ public class Prediction {
             buildRatingTraining(i);
             buildRatingTesting(i);
 
-            System.out.println("matTraining row = "+matTraining.length+" col = "+matTraining[0].length);
-            System.out.println("matTesting row = "+matTesting.length+" col = "+matTesting[0].length);
-            System.out.println("ratingTraining row = "+ratingTraining.size());
-            System.out.println("ratingTesting row = "+ratingTesting.size() );
+            //System.out.println("matTraining row = "+matTraining.length+" col = "+matTraining[0].length);
+            //System.out.println("matTesting row = "+matTesting.length+" col = "+matTesting[0].length);
+            //System.out.println("ratingTraining row = "+ratingTraining.size());
+            //System.out.println("ratingTesting row = "+ratingTesting.size() );
 
             findFeatureWeighting = new NelderMead(matTraining, ratingTraining);
 
@@ -96,7 +96,7 @@ public class Prediction {
             //findFeatureWeighting.printFeatureWeighting(i);
             //findFeatureWeighting.printDistance(i);
             //findFeatureWeighting.printWeightings(i);
-            System.out.println("MSE = "+findFeatureWeighting.getMSE());
+            //System.out.println("MSE = "+findFeatureWeighting.getMSE());
             double[] v = findFeatureWeighting.getFeatureWeighting();
 
             for (int j = 0 ; j < v.length ; j++ ) {
@@ -174,7 +174,7 @@ public class Prediction {
 
         for ( int i = 0 ; i < matTesting.length ; i++ ) {
             error += SQR(ratingTesting.get(i) - predictingRating(i, v, iTimes));
-            System.out.println("i = "+i+": Actual raing = "+ratingTesting.get(i)+" , Predicted raing = "+predictedRating[i]);
+            //System.out.println("i = "+i+": Actual raing = "+ratingTesting.get(i)+" , Predicted raing = "+predictedRating[i]);
         }
         error /= matTesting.length;
         return error;

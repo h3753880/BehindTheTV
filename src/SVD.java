@@ -63,16 +63,16 @@ public class SVD {
                 break;
             }
         }
-        System.out.println("accum index = "+accumuIndex);
+        //System.out.println("accum index = "+accumuIndex);
 
         u = new double[U.numRows()][accumuIndex];
         w = new double[accumuIndex][accumuIndex];
         v = new double[accumuIndex][V.numCols()];
         uw = new double[U.numRows()][accumuIndex];
 
-        System.out.println("U row = "+u.length+" U col = "+u[0].length);
-        System.out.println("W row = "+w.length+" W col = "+w[0].length);
-        System.out.println("V row = "+v.length+" V col = "+v[0].length);
+        //System.out.println("U row = "+u.length+" U col = "+u[0].length);
+        //System.out.println("W row = "+w.length+" W col = "+w[0].length);
+        //System.out.println("V row = "+v.length+" V col = "+v[0].length);
         for( int i = 0; i < u.length; i++) {
             for( int j = 0 ; j < u[0].length ; j++) {
                 u[i][j] = U.get(i,j);
