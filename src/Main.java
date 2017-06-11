@@ -63,7 +63,7 @@ public class Main {
         catch(IOException ioe){
             //Handle exception here, most of the time you will just log it.
         }
-        int kFold = 5;  // k-fold cross-validation
+        int kFold = 2;  // k-fold cross-validation
         long time1, time2, time3;
 
 
@@ -78,7 +78,7 @@ public class Main {
 
         double[][] mat = norm.getMat();
         //double[][] mat = svd.getU();
-        double[][] matContent = new double[mat.length][39];
+        double[][] matContent = new double[mat.length][36];
         for ( int i = 0 ; i < matContent.length ; i++ ) {
             for ( int j = 0 ; j < matContent[i].length ; j++ ) {
                 matContent[i][j] = mat[i][j];
