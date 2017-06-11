@@ -77,13 +77,14 @@ public class Main {
         //svd.printUW();
 
         double[][] mat = norm.getMat();
-        double[][] matContent = new double[mat.length][36];
+        //double[][] mat = svd.getU();
+        double[][] matContent = new double[mat.length][39];
         for ( int i = 0 ; i < matContent.length ; i++ ) {
             for ( int j = 0 ; j < matContent[i].length ; j++ ) {
                 matContent[i][j] = mat[i][j];
             }
         }
-        //double[][] mat = svd.getU();
+
         ArrayList<Double> rating = norm.getRating();
         double[] ratingArray = new double[mat.length];
 
@@ -96,7 +97,7 @@ public class Main {
         }*/
         time2 = System.currentTimeMillis();
         //Prediction predictiveModel = new Prediction(norm.getMat(), norm.getImdbRating(), kFold);
-        Prediction predictiveModel = new Prediction(mat, norm.getImdbRating(), kFold);
+        Prediction predictiveModel = new Prediction(matContent, norm.getImdbRating(), kFold);
         //Prediction predictiveModel = new Prediction(formerResult, norm.getImdbRating(), kFold);
         predictiveModel.predict();
 
