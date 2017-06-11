@@ -318,21 +318,6 @@ public class Normal {
         map.put(map.size(), "producerNegReview");
         genMap.put("producerNegReview", genMap.size());
 
-        // 67 channel
-        int count = 0;
-        for(String chan: channels) {
-            //network webChannel
-
-            if(!genMap.containsKey(chan)) {
-                map.put(map.size(), chan);
-                genMap.put(chan, genMap.size());
-            }
-            else {
-                genMap.put(chan + count, genMap.size());
-                map.put(map.size(), chan + count);
-            }
-        }
-
         //6
         map.put(map.size(), "numSeason");
         genMap.put("numSeason", genMap.size());
@@ -347,6 +332,21 @@ public class Normal {
         genMap.put("fallRel", genMap.size());
         map.put(map.size(), "winterRel");
         genMap.put("winterRel", genMap.size());
+
+        // 67 channel
+        int count = 0;
+        for(String chan: channels) {
+            //network webChannel
+
+            if(!genMap.containsKey(chan)) {
+                map.put(map.size(), chan);
+                genMap.put(chan, genMap.size());
+            }
+            else {
+                genMap.put(chan + count, genMap.size());
+                map.put(map.size(), chan + count);
+            }
+        }
     }
 
     private void setRating() {
