@@ -13,13 +13,11 @@ import java.util.*;
 import java.text.DecimalFormat;
 import java.io.FileWriter;
 
-
 public class NelderMead
 {
 
-
-    static private int MAXITER = 0;
-    static private int ncalls = 0;
+    private int MAXITER = 0;
+    private int ncalls = 0;
     static private final double TOL = 1E-6;
 
     static private final double LAMBDA = 0.001;
@@ -33,12 +31,12 @@ public class NelderMead
     //static private final int NCLOSETVSHOW = 10;
 
 
-    static private double[][] mat;
-    static private double[][] distance;
-    static private double[][] weightings;
-    static private double[]   featureWeighting;
-    static private ArrayList<Double> rating;
-    static private ArrayList<Double> predictedRating;
+    private double[][] mat;
+    private double[][] distance;
+    private double[][] weightings;
+    private double[]   featureWeighting;
+    private ArrayList<Double> rating;
+    private ArrayList<Double> predictedRating;
 
     //static private double[][] closestDistance;
     //static private int[][] indexClosestDistance;
@@ -241,13 +239,13 @@ public class NelderMead
 
     }
 
-    static double func(double v[])
+    double func(double v[])
     {
         ncalls++;
         return objective(v);
     }
 
-    static double objective(double v[])
+    double objective(double v[])
     {
         double penalty = 0;
         for ( int i = 0 ; i < NDIMS ; i++ ) {
@@ -256,7 +254,7 @@ public class NelderMead
         return LOOMSE(v) + LAMBDA * penalty;
     }
 
-    static double LOOMSE(double v[])
+    double LOOMSE(double v[])
     {
 
         double meanSquareError = 0;
@@ -268,8 +266,7 @@ public class NelderMead
 
         return meanSquareError;
     }
-
-    static double prediction(int indexPredicted, double v[])
+    double prediction(int indexPredicted, double v[])
     {
         double tempDistance = 0;
 
@@ -309,12 +306,12 @@ public class NelderMead
     }
     /////////////////////////////////utilities ////////////////////
 
-    static double SQR(double x)
+    double SQR(double x)
     {
         return x*x;
     }
 
-    static String fwi(int n, int w)
+    String fwi(int n, int w)
     // converts an int to a string with given width.
     {
         String s = Integer.toString(n);
@@ -324,7 +321,7 @@ public class NelderMead
     }
 
 
-    static String fwd(double x, int w, int d)
+    String fwd(double x, int w, int d)
     // converts a double to a string with given width and decimals.
     {
         java.text.DecimalFormat df = new DecimalFormat();

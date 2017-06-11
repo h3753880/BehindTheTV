@@ -72,39 +72,59 @@ public class Main {
 
         // doSomething()
 
-
         double[][] mat = norm.getMat();
         //double[][] mat = svd.getU();
-        double[][] matContent = new double[mat.length][45];
+        double[][] matContent = new double[mat.length][39];
+        double[][] matContentMore = new double[mat.length][45];
         for ( int i = 0 ; i < matContent.length ; i++ ) {
             for ( int j = 0 ; j < matContent[i].length ; j++ ) {
                 matContent[i][j] = mat[i][j];
             }
         }
-        SVD svd = new SVD(mat);
-        svd.buildSVD();
+        for ( int i = 0 ; i < matContentMore.length ; i++ ) {
+            for ( int j = 0 ; j < matContentMore[i].length ; j++ ) {
+                matContentMore[i][j] = mat[i][j];
+            }
+        }
+        SVD s3 = new SVD(mat);
+        s3.buildSVD();
+        SVD s1 = new SVD(matContent);
+        s1.buildSVD();
+        SVD s2 = new SVD(matContentMore);
+        s2.buildSVD();
 
         ArrayList<Double> rating = norm.getRating();
         double[] ratingArray = new double[mat.length];
 
-        time2 = System.currentTimeMillis();
-        //Prediction predictiveModel = new Prediction(norm.getMat(), norm.getImdbRating(), kFold);
-        Prediction predictiveModel = new Prediction(svd.getU(), norm.getImdbRating(), kFold);
-        //Prediction predictiveModel = new Prediction(formerResult, norm.getImdbRating(), kFold);
-        predictiveModel.predict();
-        double[] finalPredictedRating = predictiveModel.getFinalPredictedRating();
-
-
-        double result = predictiveModel.getMeanSquaredError();
+        Prediction p1 = new Prediction(matContent, norm.getImdbRating(), kFold);
+        p1.predict();
+        double result = p1.getMeanSquaredError();
         System.out.println("Avg MSE = "+result);
 
-        time3 = System.currentTimeMillis();
+        Prediction p2 = new Prediction(matContentMore, norm.getImdbRating(), kFold);
+        p2.predict();
+        result = p2.getMeanSquaredError();
+        System.out.println("Avg MSE = "+result);
 
+        Prediction p3 = new Prediction(mat, norm.getImdbRating(), kFold);
+        p3.predict();
+        result = p3.getMeanSquaredError();
+        System.out.println("Avg MSE = "+result);
 
-        System.out.println("SVD花了：" + (time2-time1)/1000 + "秒");
+        Prediction p4 = new Prediction(s1.getU(), norm.getImdbRating(), kFold);
+        p4.predict();
+        result = p4.getMeanSquaredError();
+        System.out.println("Avg MSE = "+result);
 
-        System.out.println("Prediction花了：" + (time3-time2)/1000 + "秒");
+        Prediction p5 = new Prediction(s2.getU(), norm.getImdbRating(), kFold);
+        p5.predict();
+        result = p5.getMeanSquaredError();
+        System.out.println("Avg MSE = "+result);
 
+        Prediction p6 = new Prediction(s3.getU(), norm.getImdbRating(), kFold);
+        p6.predict();
+        result = p6.getMeanSquaredError();
+        System.out.println("Avg MSE = "+result);
         //System.out.println(gson.toJson(shows)); //test
     }
     static double SQR(double e) {return e*e;}

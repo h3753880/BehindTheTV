@@ -15,11 +15,11 @@ import java.util.ArrayList;
 
 public class SVD {
 
-    static private double[][] m;
-    static private double[][] u;
-    static private double[][] w;
-    static private double[][] v;
-    static private double[][] uw;
+    private double[][] m;
+    private double[][] u;
+    private double[][] w;
+    private double[][] v;
+    private double[][] uw;
 
     public SVD(double[][] mat) {
 

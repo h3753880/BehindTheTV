@@ -10,29 +10,28 @@ import java.util.*;
 
 public class Prediction {
 
-    static private double[][] m;
-    static private ArrayList<Double> rating;
-    static private NelderMead findFeatureWeighting = null;
-    static private int kFold;
-    static private double[] error;
-    static private int numTesting;
-    static private int numTraining;
-    static private double[][] matTesting;
-    static private double[][] matTraining;
+    private double[][] m;
+    private ArrayList<Double> rating;
+    private NelderMead findFeatureWeighting = null;
+    private int kFold;
+    private double[] error;
+    private int numTesting;
+    private int numTraining;
+    private double[][] matTesting;
+    private double[][] matTraining;
 
-    static private ArrayList<Double> ratingTesting;
-    static private ArrayList<Double> ratingTraining;
+    private ArrayList<Double> ratingTesting;
+    private ArrayList<Double> ratingTraining;
 
-    static private double[] predictedRating;
+    private double[] predictedRating;
 
-    static private double[][] distance;
-    static private double[][] weightings;
-    static private double[][] featureWeighting;
+    private double[][] distance;
+    private double[][] weightings;
+    private double[][] featureWeighting;
 
-
-    static private double[][] finalDistance;
-    static private double[][] finalWeightings;
-    static private double[]   finalPredictedRating;
+    private double[][] finalDistance;
+    private double[][] finalWeightings;
+    private double[]   finalPredictedRating;
 
     static private double THETA;
 
@@ -106,8 +105,8 @@ public class Prediction {
             THETA = findFeatureWeighting.getTheta();
             error[i] = getError(v, i);
 
-            printRatTrain(i);
-            printRatTest(i);
+            //printRatTrain(i);
+            //printRatTest(i);
 
         }
         for ( int j = 0 ; j < featureWeighting[0].length ; j++ )
@@ -180,7 +179,7 @@ public class Prediction {
         return error;
     }
 
-    static double predictingRating(int indexPredicted, double v[], int iTimes)
+    double predictingRating(int indexPredicted, double v[], int iTimes)
     {
         double tempDistance = 0;
 
@@ -221,7 +220,7 @@ public class Prediction {
         return predictedResult;
     }
 
-    static double SQR(double x)
+    double SQR(double x)
     {
         return x*x;
     }
@@ -230,7 +229,7 @@ public class Prediction {
         return finalPredictedRating;
     }
 
-    static void printFinalPredictedRating(){
+    void printFinalPredictedRating(){
         try{
             //All your IO Operations
             FileWriter fw = new FileWriter("Final_Predicted_Rating.csv");
@@ -245,7 +244,7 @@ public class Prediction {
             //Handle exception here, most of the time you will just log it.
         }
     }
-    static void printActualRating() {
+    void printActualRating() {
         try{
             //All your IO Operations
             FileWriter fw = new FileWriter("Actual_Rating.csv");
@@ -261,7 +260,7 @@ public class Prediction {
         }
     }
 
-    public double getMeanSquaredError()
+    double getMeanSquaredError()
     {
         double result = 0;
         for (int i = 0 ; i < error.length ; i++ )
@@ -304,7 +303,7 @@ public class Prediction {
         }
     }
 
-    static String fwd(double x, int w, int d)
+    String fwd(double x, int w, int d)
     // converts a double to a string with given width and decimals.
     {
         java.text.DecimalFormat df = new DecimalFormat();
